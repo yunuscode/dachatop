@@ -20,6 +20,8 @@ export default {
     grayBackground: grayBackgroundLight,
     borderColor: borderColorLight,
     backgroundInput: backgroundInputLight,
+    buttonBackground: backgroundInputLight,
+    activeButtonBackground: "#0064E5"
   },
   dark: {
     text: "#fff",
@@ -31,5 +33,7 @@ export default {
     grayBackground: grayBackgroundDark,
     borderColor: borderColorDark,
     backgroundInput: backgroundInputDark,
+    buttonBackground: "#000",
+    activeButtonBackground: "#4798FF"
   },
 };

@@ -8,7 +8,8 @@ import {
   useColorScheme,
   View as DefaultView,
   TextInput as DefaultTextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ScrollView as DefaultScrollView
 } from "react-native";
 
 import Colors from "@/constants/Colors";
@@ -96,4 +97,18 @@ export function TextInput(props: TextInputProps) {
 
 
   return <DefaultTextInput style={[{ color, borderColor, backgroundColor }, style]} placeholderTextColor={color} {...otherProps} />
+}
+
+
+
+export function ScrollView(props: DefaultScrollView["props"]) {
+
+  const backgroundColor = useThemeColor({ }, "background");
+
+  const {
+    style,
+    ...otherProps
+  } = props;
+
+  return <DefaultScrollView style={[{backgroundColor}, style]} {...otherProps} />
 }

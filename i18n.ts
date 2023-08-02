@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { locale } from "expo-localization";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const resources = {
   en: {
@@ -10,10 +11,11 @@ const resources = {
       "Login with phone number": "Login with phone number",
       "Please enter your phone number": "Please enter your phone number",
       "Phone number": "Phone number",
-      "Login": "Login",
+      Login: "Login",
       "Confirm OTP code": "Confirm OTP code",
-      "We've sent OTP code to your phone number. Please enter it.": "We've sent OTP code to your phone number. Please enter it.",
-      "Confirm": "Confirm",
+      "We've sent OTP code to your phone number. Please enter it.":
+        "We've sent OTP code to your phone number. Please enter it.",
+      Confirm: "Confirm",
     },
   },
   ru: {
@@ -23,9 +25,10 @@ const resources = {
       "Login with phone number": "Войти с номером телефона",
       "Please enter your phone number": "Пожалуйста введите ваш номер телефона",
       "Phone number": "Phone number",
-      "Login": "Login",
+      Login: "Login",
       "Confirm OTP code": "Confirm OTP code",
-      "We've sent OTP code to your phone number. Please enter it.": "We've sent OTP code to your phone number. Please enter it."
+      "We've sent OTP code to your phone number. Please enter it.":
+        "We've sent OTP code to your phone number. Please enter it.",
     },
   },
   uz: {
@@ -36,23 +39,32 @@ const resources = {
       "Please enter your phone number":
         "Iltimos, telefon raqamingizni to'g'ri kiriting!",
       "Phone number": "Telefon raqamingiz",
-      "Login": "Kirish",
+      Login: "Kirish",
       "Confirm OTP code": "SMS kodni tasdiqlash",
-      "We've sent OTP code to your phone number. Please enter it.": "Biz sizga sms orqali kod yubordik, iltimos shuni kiriting!",
-      "Confirm": "Tasdiqlash",
-      "OTP code": "SMS kod"
+      "We've sent OTP code to your phone number. Please enter it.":
+        "Biz sizga sms orqali kod yubordik, iltimos shuni kiriting!",
+      Confirm: "Tasdiqlash",
+      "OTP code": "SMS kod",
     },
   },
 };
 
-i18n.use(initReactI18next).init({
-  compatibilityJSON: "v3",
-  resources,
-  lng: locale,
-  fallbackLng: "en",
-  interpolation: {
-    escapeValue: false,
-  },
+export function i18init(lng: string | null) {
+  return i18n.use(initReactI18next).init({
+    compatibilityJSON: "v3",
+    resources,
+    lng: lng || locale,
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+}
+
+i18n.on("languageChanged", (lng: string) => {
+  AsyncStorage.setItem("lang", lng).catch((e) => {
+    console.log(e);
+  });
 });
 
 export default i18n;

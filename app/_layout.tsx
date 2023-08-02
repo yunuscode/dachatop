@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import "@/i18n";
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { i18init } from '@/i18n';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -32,9 +34,13 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    (async function() {
+      let lang = await AsyncStorage.getItem("lang");
+      i18init(lang);
+      if (loaded) {
+        SplashScreen.hideAsync();
+      }
+    })()
   }, [loaded]);
 
   if (!loaded) {
@@ -52,6 +58,7 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: t("Select language") }} />
       </Stack>
     </ThemeProvider>
