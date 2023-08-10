@@ -1,16 +1,28 @@
-import { StyleSheet, useColorScheme } from "react-native";
+import { Dimensions, Image, StyleSheet, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Carousel from "react-native-reanimated-carousel";
 
 import { ScrollView, Text, TextInput, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
 import Badge from "@/components/Badge";
 import { useEffect, useState } from "react";
+import { fetchPlaces } from "@/api/mock";
+import { CarouselItem } from "@/components/CarouselItem";
 
 export default function TabOneScreen() {
   const colorScheme = useColorScheme();
   const [activeBadge, setActiveBadge] = useState(0);
+  const [places, setPlaces] = useState<any[]>([]);
+
+  const width = Dimensions.get("window").width;
 
   const fakeBadges = ["Eng mashxur", "Eng yangi", "Eng arzon"];
+
+  useEffect(() => {
+    fetchPlaces.then((data: any) => {
+      setPlaces(data.data);
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -39,6 +51,12 @@ export default function TabOneScreen() {
           );
         })}
       </ScrollView>
+      <Text style={styles.title}>Eng ko'p ko'rilgan</Text>
+      {places.map((item, index) => {
+        return (
+          <CarouselItem images={item.images.map((i: any) => ({ uri: i }))} itemIndex={index} price="10 mln - 12 mln" width={width} title={item.title} key={index} />
+        );
+      })}
     </ScrollView>
   );
 }
@@ -77,5 +95,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     zIndex: 5,
     marginTop: 15,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginTop: 20,
+    marginBottom: 16,
   },
 });
