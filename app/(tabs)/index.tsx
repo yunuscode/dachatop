@@ -1,6 +1,5 @@
 import { Dimensions, Image, StyleSheet, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Carousel from "react-native-reanimated-carousel";
 
 import { ScrollView, Text, TextInput, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
@@ -8,6 +7,7 @@ import Badge from "@/components/Badge";
 import { useEffect, useState } from "react";
 import { fetchPlaces } from "@/api/mock";
 import { CarouselItem } from "@/components/CarouselItem";
+
 
 export default function TabOneScreen() {
   const colorScheme = useColorScheme();

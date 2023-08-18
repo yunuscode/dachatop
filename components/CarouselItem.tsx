@@ -1,7 +1,11 @@
-import { Image, StyleSheet } from "react-native";
-import Carousel from "react-native-reanimated-carousel";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
 
@@ -15,10 +19,11 @@ type CarouselItemProps = {
 
 export function CarouselItem(props: CarouselItemProps) {
   const { itemIndex, width, images, title, price } = props;
+  const navigation = useNavigation();
 
   return (
     <View key={itemIndex} style={styles.carouselView}>
-      <Carousel
+      {/* <Carousel
         width={width - 47}
         height={width / 2}
         data={images}
@@ -27,63 +32,81 @@ export function CarouselItem(props: CarouselItemProps) {
         panGestureHandlerProps={{
           activeOffsetX: [-10, 10],
         }}
-        renderItem={({ index }) => (
+        renderItem={({ index }) => ( */}
           <Image
-            source={{ uri: images[index].uri }}
+            source={{ uri: images[0].uri }}
             style={[
-              styles.carouselImage,
+              styles.carousel,
               {
                 height: width / 2,
               },
             ]}
           />
-        )}
-      />
-      <View style={styles.informationsBoard}>
-        <Text lightColor="#0064E5" darkColor="#0064E5" style={styles.priceText}>
-          {price}
-        </Text>
-        <Text lightColor="#A1A8B0" darkColor="#A1A8B0" style={styles.dot}>
-          •
-        </Text>
-        <Text lightColor="#A1A8B0" darkColor="#A1A8B0">
-          Dacha
-        </Text>
-        <AntDesign
-          name="star"
-          size={16}
-          color="#FFBA55"
-          style={styles.starIcon}
-        />
-        <Text lightColor="#FFBA55" darkColor="#FFBA55" style={styles.rateText}>
-          4.0
-        </Text>
-      </View>
-      <View style={styles.details}>
-        <Text style={styles.title}>{title}</Text>
-        <FontAwesome
-          name="bath"
-          size={18}
-          color="#A1A8B0"
-          style={styles.showerIcon}
-        />
-        <Text
-          lightColor="#A1A8B0"
-          style={styles.showerText}
-          darkColor="#A1A8B0"
-        >
-          2
-        </Text>
-        <Ionicons
-          name="ios-bed-outline"
-          size={20}
-          color="#A1A8B0"
-          style={styles.bedIcon}
-        />
-        <Text lightColor="#A1A8B0" darkColor="#A1A8B0" style={styles.bedText}>
-          4
-        </Text>
-      </View>
+        {/* )} */}
+      {/* /> */}
+      <Pressable onPress={() => {
+        navigation?.navigate(...["(shared)", {
+          screen: "details",
+          params: {
+            images,
+            title
+          }
+        }] as never);
+      }}>
+        <View style={styles.informationsBoard}>
+          <Text
+            lightColor="#0064E5"
+            darkColor="#0064E5"
+            style={styles.priceText}
+          >
+            {price}
+          </Text>
+          <Text lightColor="#A1A8B0" darkColor="#A1A8B0" style={styles.dot}>
+            •
+          </Text>
+          <Text lightColor="#A1A8B0" darkColor="#A1A8B0">
+            Dacha
+          </Text>
+          <AntDesign
+            name="star"
+            size={16}
+            color="#FFBA55"
+            style={styles.starIcon}
+          />
+          <Text
+            lightColor="#FFBA55"
+            darkColor="#FFBA55"
+            style={styles.rateText}
+          >
+            4.0
+          </Text>
+        </View>
+        <View style={styles.details}>
+          <Text style={styles.title}>{title}</Text>
+          <FontAwesome
+            name="bath"
+            size={18}
+            color="#A1A8B0"
+            style={styles.showerIcon}
+          />
+          <Text
+            lightColor="#A1A8B0"
+            style={styles.showerText}
+            darkColor="#A1A8B0"
+          >
+            2
+          </Text>
+          <Ionicons
+            name="ios-bed-outline"
+            size={20}
+            color="#A1A8B0"
+            style={styles.bedIcon}
+          />
+          <Text lightColor="#A1A8B0" darkColor="#A1A8B0" style={styles.bedText}>
+            4
+          </Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
