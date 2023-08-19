@@ -38,7 +38,7 @@ export default function SharedLayout() {
       <Stack.Screen
         name="book"
         options={{
-          title: "",
+          title: "Kunlarni tanlash",
           headerLeft: () => {
             const navigation = useNavigation();
 
