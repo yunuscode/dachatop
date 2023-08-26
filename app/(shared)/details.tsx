@@ -2,7 +2,7 @@ import Badge from "@/components/Badge";
 import { ScrollView, Text, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import {
@@ -104,7 +104,9 @@ function DetailsScreen() {
         </View>
         <Pressable
             onPress={() => {
-                navigation.navigate("book" as never)
+                navigation.navigate(...["book", {
+                    params: route.params
+                }] as never)
             }}
           style={{
             backgroundColor: Colors[colorScheme ?? "light"].text,

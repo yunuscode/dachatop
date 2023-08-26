@@ -5,12 +5,16 @@ import CalendarPicker from "react-native-calendar-picker";
 import { useState } from "react";
 import moment, { Moment } from "moment";
 import Colors from "@/constants/Colors";
+import { useNavigation } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 
 
 function BookScreen() {
 
   const height = Dimensions.get("window").height;
   const colorScheme = useColorScheme();
+  const navigation = useNavigation();
+  const route = useRoute();
     
 
     const [startDate, setStartDate] = useState<any>();
@@ -83,7 +87,9 @@ moment.locale("uz")
         </View>
         <Pressable
             onPress={() => {
-                // navigation.navigate("book" as never)
+                navigation.navigate(...["confirm", {
+                    params: route.params
+                }] as never)
             }}
           style={{
             backgroundColor: Colors[colorScheme ?? "light"].text,

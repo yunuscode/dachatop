@@ -57,6 +57,50 @@ export default function SharedLayout() {
           },
         }}
       />
+      <Stack.Screen
+        name="confirm"
+        options={{
+          title: "Tasdiqlash",
+          headerLeft: () => {
+            const navigation = useNavigation();
+
+            return (
+              <Pressable onPress={navigation.goBack}>
+                {({ pressed }) => (
+                  <AntDesign
+                    name="arrowleft"
+                    size={25}
+                    color={Colors[colorScheme ?? "light"].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            );
+          },
+        }}
+      />
+       <Stack.Screen
+        name="cheque"
+        options={{
+          title: "Tadaam!",
+          headerLeft: () => {
+            const navigation = useNavigation();
+
+            return (
+              <Pressable onPress={navigation.goBack}>
+                {({ pressed }) => (
+                  <AntDesign
+                    name="arrowleft"
+                    size={25}
+                    color={Colors[colorScheme ?? "light"].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            );
+          },
+        }}
+      />
        <Stack.Screen
         name="details"
         options={{

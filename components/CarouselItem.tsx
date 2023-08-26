@@ -1,13 +1,19 @@
 import {
+  Dimensions,
   Image,
   Pressable,
   StyleSheet,
+  useColorScheme,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
+import { useState } from "react";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
+import SkletonView from "@/components/SkletonView";
 
 type CarouselItemProps = {
   itemIndex: number;
@@ -21,38 +27,52 @@ export function CarouselItem(props: CarouselItemProps) {
   const { itemIndex, width, images, title, price } = props;
   const navigation = useNavigation();
 
+  const [photoLoading, setPhotoLoading] = useState<boolean>(true);
+  const colorMode = useColorScheme();
+
   return (
     <View key={itemIndex} style={styles.carouselView}>
-      {/* <Carousel
-        width={width - 47}
-        height={width / 2}
-        data={images}
-        style={styles.carousel}
-        scrollAnimationDuration={1000}
-        panGestureHandlerProps={{
-          activeOffsetX: [-10, 10],
+      <Image
+        source={{ uri: images[0].uri }}
+        onLoadEnd={() => {
+            setPhotoLoading(false);
         }}
-        renderItem={({ index }) => ( */}
-          <Image
-            source={{ uri: images[0].uri }}
-            style={[
-              styles.carousel,
+        style={[
+          styles.carousel,
+          {
+            height: width / 2,
+          },
+        ]}
+      />
+      {photoLoading && (
+        <SkletonView
+          height={width /2}
+          width={"100%"}
+          style={[
+            styles.carousel,
+            {
+              height: width / 2,
+            },
+          ]}
+        />
+      )}
+
+      <Pressable
+        onPress={() => {
+          navigation?.navigate(
+            ...([
+              "(shared)",
               {
-                height: width / 2,
+                screen: "details",
+                params: {
+                  images,
+                  title,
+                },
               },
-            ]}
-          />
-        {/* )} */}
-      {/* /> */}
-      <Pressable onPress={() => {
-        navigation?.navigate(...["(shared)", {
-          screen: "details",
-          params: {
-            images,
-            title
-          }
-        }] as never);
-      }}>
+            ] as never)
+          );
+        }}
+      >
         <View style={styles.informationsBoard}>
           <Text
             lightColor="#0064E5"
