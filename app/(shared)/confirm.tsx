@@ -5,7 +5,6 @@ import CardIcon from "@/icons/cardIcon";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { MotiView } from "moti";
 import { useState } from "react";
 import {
   Dimensions,
@@ -14,6 +13,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from "react-native";
+
 
 function ConfirmScreen() {
   const height = Dimensions.get("window").height;
@@ -70,11 +70,7 @@ function ConfirmScreen() {
           </View>
           <Text style={styles.accordionText}>To'lov turlarini ko'rish</Text>
           <View style={styles.accordionIcon}>
-            <MotiView
-              animate={{
-                transform: [{ rotate: showPaymentMethods ? "90deg" : "0deg" }],
-              }}
-            >
+           
               <AntDesign
                 name="right"
                 size={20}
@@ -86,21 +82,13 @@ function ConfirmScreen() {
                     : "#A1A8B0"
                 }
               />
-            </MotiView>
           </View>
         </View>
-        <MotiView
-          animate={{
-            marginVertical: showPaymentMethods ? 10 : 0,
-          }}
-        >
-          {showPaymentMethods && (
+        
             <Text>
               Tizimiziz ayni paytda Payme va Uzumbank to'lovlarini qo'llab
               quvvatlaydi.
             </Text>
-          )}
-        </MotiView>
       </Pressable>
       <Pressable
         onPress={() => setShowCancelPolicy(!showCancelPolicy)}
@@ -112,11 +100,7 @@ function ConfirmScreen() {
           </View>
           <Text style={styles.accordionText}>Bekor qilish siyosati</Text>
           <View style={styles.accordionIcon}>
-            <MotiView
-              animate={{
-                transform: [{ rotate: showCancelPolicy ? "90deg" : "0deg" }],
-              }}
-            >
+            
               <AntDesign
                 name="right"
                 size={20}
@@ -128,21 +112,13 @@ function ConfirmScreen() {
                     : "#A1A8B0"
                 }
               />
-            </MotiView>
           </View>
         </View>
-        <MotiView
-          animate={{
-            marginVertical: showCancelPolicy ? 10 : 0,
-          }}
-        >
-          {showCancelPolicy && (
+        
             <Text>
               Bepul bekor qilish sanasidan keyin bekor qilsangiz "Band qilish
               uchun to'lov" summasi qaytarilmaydi.
             </Text>
-          )}
-        </MotiView>
       </Pressable>
       <View
         style={{

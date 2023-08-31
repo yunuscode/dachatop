@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   StyleSheet,
@@ -11,8 +10,6 @@ import { useNavigation } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
 import { useState } from "react";
-import { MotiView } from "moti";
-import { Skeleton } from "moti/skeleton";
 import SkletonView from "@/components/SkletonView";
 
 type CarouselItemProps = {

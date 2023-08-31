@@ -24,7 +24,9 @@ moment.locale("uz")
 
   return (
     <View style={styles.container}>
-      <View style={styles.infoTable}>
+      <View style={[styles.infoTable, {
+        backgroundColor: colorScheme === "dark" ? "#0c57b3" : "#EBF4FF",
+      }]}>
         <View style={styles.infoTableInformations}>
           <Text color="grayText" style={styles.startDayText}>
             Kirish kuni
@@ -53,7 +55,9 @@ moment.locale("uz")
         selectedStartDate={startDate}
         selectedEndDate={endDate}
         allowRangeSelection
-        textStyle={styles.calendarTextStyle}
+        textStyle={[styles.calendarTextStyle, {
+          color: colorScheme === "dark" ? "#fff" : "#000"
+        }]}
         minDate={startDate || new Date()}
         maxRangeDuration={7}
         selectedRangeStartStyle={{backgroundColor: "#0064E5"}}
@@ -121,7 +125,6 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   infoTable: {
-    backgroundColor: "#EBF4FF",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

@@ -1,6 +1,6 @@
-import { MotiView } from "moti";
-import { Skeleton } from "moti/skeleton";
+
 import { StyleProp, ViewStyle, useColorScheme } from "react-native";
+import { View } from "./Themed";
 
 type SkletonViewProps = {
   style: StyleProp<ViewStyle>;
@@ -13,12 +13,6 @@ export default function SkletonView(props: SkletonViewProps) {
   const colorMode = useColorScheme();
 
   return (
-    <MotiView style={style}>
-      <Skeleton
-        width={width}
-        height={height}
-        colorMode={colorMode === "light" ? "light" : "dark"}
-      />
-    </MotiView>
+    <View></View>
   );
 }
