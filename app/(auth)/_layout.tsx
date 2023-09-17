@@ -3,6 +3,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -10,6 +12,9 @@ export const unstable_settings = {
 
 export default function AuthLayout() {
   const colorScheme = useColorScheme();
+  const state = useSelector((state: RootState) => state.user);
+
+  console.log(state);
 
   return (
     <Stack initialRouteName="index">
