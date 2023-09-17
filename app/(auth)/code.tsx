@@ -1,20 +1,19 @@
+import { setUserToken } from "@/actions/user";
 import NavigationButton from "@/components/Button";
 import { Text, TextInput, View } from "@/components/Themed";
 import { useRootNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Keyboard, Platform } from "react-native";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const { t } = useTranslation();
-  const navigation = useRootNavigation();
-
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    //@ts-ignore
-    navigation?.navigate("(tabs)");
-  }
-
+    dispatch(setUserToken("1234"));
+  };
 
   return (
     <View
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 32,
     marginTop: "auto",
-    marginBottom: 50
+    marginBottom: 50,
   },
 });
 

@@ -3,9 +3,16 @@ import { Pressable, StyleSheet, useColorScheme } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { setUserToken } from "@/actions/user";
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
+  const dispatch = useDispatch();
+
+  const logOut = () => {
+    dispatch(setUserToken(""));
+  };
 
   return (
     <View style={styles.container}>
@@ -23,7 +30,11 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.informations}>
           <Text style={styles.buttonTitle}>Ma'lumotlarni o'zgartirish</Text>
-          <Ionicons name="chevron-forward" color={colorScheme === "dark" ? "#fff" : "#000"} size={22} />
+          <Ionicons
+            name="chevron-forward"
+            color={colorScheme === "dark" ? "#fff" : "#000"}
+            size={22}
+          />
         </View>
       </Pressable>
       <Pressable
@@ -39,50 +50,73 @@ export default function ProfileScreen() {
         </View>
         <View style={styles.informations}>
           <Text style={styles.buttonTitle}>Band qilingan buyurtmalar</Text>
-          <Ionicons name="chevron-forward" color={colorScheme === "dark" ? "#fff" : "#000"} size={22} />
+          <Ionicons
+            name="chevron-forward"
+            color={colorScheme === "dark" ? "#fff" : "#000"}
+            size={22}
+          />
         </View>
       </Pressable>
-      <Pressable  style={[
+      <Pressable
+        style={[
           styles.button,
           {
             borderTopColor: colorScheme === "dark" ? "#ffffffaa" : "#00000011",
           },
-        ]}>
+        ]}
+      >
         <View style={styles.iconView}>
           <Ionicons name="language" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
           <Text style={styles.buttonTitle}>Tilni sozlash</Text>
-          <Ionicons name="chevron-forward" color={colorScheme === "dark" ? "#fff" : "#000"} size={22} />
+          <Ionicons
+            name="chevron-forward"
+            color={colorScheme === "dark" ? "#fff" : "#000"}
+            size={22}
+          />
         </View>
       </Pressable>
-      <Pressable  style={[
+      <Pressable
+        style={[
           styles.lastButton,
           {
             borderTopColor: colorScheme === "dark" ? "#ffffffaa" : "#00000011",
           },
-        ]}>
+        ]}
+      >
         <View style={styles.iconView}>
           <Ionicons name="call" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
           <Text style={styles.buttonTitle}>Admin bilan bog'lanish</Text>
-          <Ionicons name="chevron-forward" color={colorScheme === "dark" ? "#fff" : "#000"} size={22} />
+          <Ionicons
+            name="chevron-forward"
+            color={colorScheme === "dark" ? "#fff" : "#000"}
+            size={22}
+          />
         </View>
       </Pressable>
 
-      <Pressable  style={[
+      <Pressable
+        onPress={logOut}
+        style={[
           styles.exitButton,
           {
             borderTopColor: colorScheme === "dark" ? "#ffffffaa" : "#00000011",
           },
-        ]}>
+        ]}
+      >
         <View style={styles.iconView}>
           <Ionicons name="exit" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
           <Text style={styles.buttonTitle}>Akkountdan chiqish</Text>
-          <Ionicons name="chevron-forward" color={colorScheme === "dark" ? "#fff" : "#000"} size={22} />
+          <Ionicons
+            name="chevron-forward"
+            color={colorScheme === "dark" ? "#fff" : "#000"}
+            size={22}
+          />
         </View>
       </Pressable>
     </View>

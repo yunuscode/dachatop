@@ -1,14 +1,21 @@
 import { Reducer, combineReducers } from "redux";
-import { SET_USER, User } from "@/actions/user";
+import { EDIT_LANG, SET_USER, User } from "@/actions/user";
 
 const initalUserObject: User = {
   isLoggedIn: false,
+  lang: "en",
 };
 
 const user: Reducer = (user = initalUserObject, action) => {
   switch (action.type) {
     case SET_USER:
-      return { token: action.token };
+      return {
+        ...user,
+        token: action.token,
+        isLoggedIn: !!action.token?.length,
+      };
+    case EDIT_LANG:
+      return { ...user, lang: action.lang };
     default:
       return user;
   }

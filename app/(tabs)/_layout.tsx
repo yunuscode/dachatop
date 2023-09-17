@@ -1,11 +1,13 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Octicons } from '@expo/vector-icons';
-import { Link, Tabs } from "expo-router";
-import { Pressable, StatusBar, useColorScheme } from "react-native";
+import { Octicons } from "@expo/vector-icons";
+import { Tabs, useNavigation } from "expo-router";
+import { StatusBar, useColorScheme } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Text, View } from "@/components/Themed";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
+import { useEffect } from "react";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -19,6 +21,18 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const state = useSelector((state: RootState) => state.user);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    console.log("test", state);
+
+    if (!state.isLoggedIn) {
+      // @ts-ignore
+      navigation.navigate("(auth)");
+    }
+  }, [state]);
 
   return (
     <Tabs
@@ -39,21 +53,16 @@ export default function TabLayout() {
         name="saved"
         options={{
           title: "Saqlanganlar",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="heart" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profil",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="person" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
         }}
       />
-      
     </Tabs>
   );
 }
@@ -69,7 +78,7 @@ function Header() {
         paddingVertical: 16,
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
       }}
     >
       <Text

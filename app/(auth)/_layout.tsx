@@ -1,10 +1,11 @@
-import { Stack, Link, useNavigation } from "expo-router";
+import { Stack, Link, useNavigation, router } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
+import { useEffect } from "react";
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -13,8 +14,16 @@ export const unstable_settings = {
 export default function AuthLayout() {
   const colorScheme = useColorScheme();
   const state = useSelector((state: RootState) => state.user);
+  const navigation = useNavigation();
 
-  console.log(state);
+  useEffect(() => {
+    if (state.isLoggedIn) {
+      setTimeout(() => {
+        // @ts-ignore
+        navigation.navigate("(tabs)");
+      }, 1);
+    }
+  }, [state]);
 
   return (
     <Stack initialRouteName="index">

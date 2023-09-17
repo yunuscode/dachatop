@@ -1,6 +1,5 @@
 import NavigationButton from "@/components/Button";
 import { Text, TextInput, View } from "@/components/Themed";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Keyboard, Platform } from "react-native";
 import { useRootNavigation } from "expo-router";
@@ -17,7 +16,7 @@ function Login() {
   return (
     <View
       type="keyboardview"
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={styles.container}
     >
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 32,
     marginTop: "auto",
-    marginBottom: 50
+    marginBottom: 50,
   },
 });
 
