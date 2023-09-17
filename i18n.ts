@@ -16,6 +16,9 @@ const resources = {
       "We've sent OTP code to your phone number. Please enter it.":
         "We've sent OTP code to your phone number. Please enter it.",
       Confirm: "Confirm",
+      Loading: "Loading...",
+      BlockedOrServerDown: "Your phone is blocked or server is down",
+      OtpCodeIsIncorrect: "OTP code is incorrect, go back and resend again",
     },
   },
   ru: {
@@ -29,6 +32,9 @@ const resources = {
       "Confirm OTP code": "Confirm OTP code",
       "We've sent OTP code to your phone number. Please enter it.":
         "We've sent OTP code to your phone number. Please enter it.",
+      Loading: "Loading...",
+      BlockedOrServerDown: "Your phone is blocked or server is down",
+      OtpCodeIsIncorrect: "OTP code is incorrect, go back and resend again",
     },
   },
   uz: {
@@ -45,6 +51,11 @@ const resources = {
         "Biz sizga sms orqali kod yubordik, iltimos shuni kiriting!",
       Confirm: "Tasdiqlash",
       "OTP code": "SMS kod",
+      Loading: "Yuklanmoqda...",
+      BlockedOrServerDown:
+        "Telefon raqamingiz bloklangan yoki serverga ulanib bo'lmayabdi",
+      OtpCodeIsIncorrect:
+        "SMS kod xato kiritildi, orqaga qaytib qaytadan yuboring",
     },
   },
 };

@@ -14,7 +14,6 @@ export default function ModalScreen() {
 
   const changeLanguage = (lang: string) => {
     dispatch(editUserLang(lang));
-    dispatch(setUserToken("123"));
     i18n.changeLanguage(lang);
     navigation.goBack();
   };

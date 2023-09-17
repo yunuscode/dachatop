@@ -11,7 +11,7 @@ export default function ProfileScreen() {
   const dispatch = useDispatch();
 
   const logOut = () => {
-    dispatch(setUserToken(""));
+    dispatch(setUserToken("", ""));
   };
 
   return (

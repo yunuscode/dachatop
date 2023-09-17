@@ -22,6 +22,8 @@ import { i18init } from "@/i18n";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "@/state/store";
+import { QueryClient, QueryClientProvider } from "react-query";
+import FlashMessage from "react-native-flash-message";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -67,23 +69,29 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: 2 } },
+  });
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack initialRouteName="(tabs)">
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(shared)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="modal"
-              options={{ presentation: "modal", title: t("Select language") }}
-            />
-          </Stack>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack initialRouteName="(tabs)">
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="(shared)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="modal"
+                options={{ presentation: "modal", title: t("Select language") }}
+              />
+            </Stack>
+            <FlashMessage position="top" />
+          </ThemeProvider>
+        </QueryClientProvider>
       </PersistGate>
     </Provider>
   );

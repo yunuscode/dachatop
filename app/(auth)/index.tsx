@@ -1,16 +1,46 @@
 import NavigationButton from "@/components/Button";
 import { Text, TextInput, View } from "@/components/Themed";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Keyboard, Platform } from "react-native";
+import { StyleSheet, Platform, Alert } from "react-native";
 import { useRootNavigation } from "expo-router";
+import { useState } from "react";
+import useLogin from "@/api/useLogin";
+import { useDispatch } from "react-redux";
+import { setOTPCodeId } from "@/actions/user";
+import { showMessage } from "react-native-flash-message";
 
 function Login() {
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { t } = useTranslation();
   const navigation = useRootNavigation();
+  const { login } = useLogin();
+  const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    //@ts-ignore
-    navigation?.navigate("code");
+    if (phoneNumber.length === 9) {
+      setLoading(true);
+      login(phoneNumber)
+        .then((data) => {
+          if (data?.otpCodeId?.length) {
+            dispatch(setOTPCodeId(data?.otpCodeId));
+            // @ts-ignore
+            navigation?.navigate("code");
+          } else {
+            throw new Error("request error");
+          }
+        })
+        .catch(() => {
+          showMessage({
+            message: t("BlockedOrServerDown"),
+            type: "danger",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -36,15 +66,18 @@ function Login() {
           keyboardType="number-pad"
           style={styles.phoneNumberInput}
           maxLength={9}
+          onChangeText={(text) => setPhoneNumber(text)}
+          value={phoneNumber}
         />
       </View>
 
       <NavigationButton
+        disabled={loading}
         onPress={handleSubmit}
         style={{
           ...styles.navigationButton,
         }}
-        text={t("Login")}
+        text={loading ? t("Loading") : t("Login")}
         textStyle={styles.navigationButtonText}
       />
     </View>

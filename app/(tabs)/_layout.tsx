@@ -26,11 +26,11 @@ export default function TabLayout() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log("test", state);
-
     if (!state.isLoggedIn) {
       // @ts-ignore
-      navigation.navigate("(auth)");
+      navigation.navigate("(auth)", {
+        screen: "index",
+      });
     }
   }, [state]);
 

@@ -1,18 +1,46 @@
 import { setUserToken } from "@/actions/user";
+import useLogin from "@/api/useLogin";
 import NavigationButton from "@/components/Button";
 import { Text, TextInput, View } from "@/components/Themed";
-import { useRootNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { RootState } from "@/state/store";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Keyboard, Platform } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showMessage } from "react-native-flash-message";
 
 function Login() {
+  const [code, setCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // custom hooks
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { verifyCode } = useLogin();
+
+  // Redux selector
+  const user = useSelector((state: RootState) => state.user);
 
   const handleClick = () => {
-    dispatch(setUserToken("1234"));
+    if (code?.length && user.otpCodeId?.length) {
+      setLoading(true);
+      verifyCode(user.otpCodeId, code)
+        .then(({ data }) => {
+          if (data?.token) {
+            console.log(data);
+            dispatch(setUserToken(data.token, data.user_role));
+          }
+        })
+        .catch((e) => {
+          showMessage({
+            message: t("OtpCodeIsIncorrect"),
+            type: "danger",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -35,6 +63,10 @@ function Login() {
           keyboardType="number-pad"
           style={styles.phoneNumberInput}
           maxLength={9}
+          onChangeText={(text) => setCode(text)}
+          value={code}
+          autoComplete="sms-otp" // android
+          textContentType="oneTimeCode" // ios
         />
       </View>
 
@@ -43,7 +75,8 @@ function Login() {
         style={{
           ...styles.navigationButton,
         }}
-        text={t("Confirm")}
+        disabled={loading}
+        text={loading ? t("Loading") : t("Confirm")}
         textStyle={styles.navigationButtonText}
       />
     </View>
