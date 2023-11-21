@@ -1,10 +1,14 @@
+import useBooking from "@/api/useBooking";
 import { Text, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
 import CancelIcon from "@/icons/cancelIcon";
 import CardIcon from "@/icons/cardIcon";
+import { RootState } from "@/state/store";
+import calculateTotalPrice from "@/utils/priceCalculator";
 import { AntDesign } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
+import moment from "moment";
 import { useState } from "react";
 import {
   Dimensions,
@@ -13,7 +17,8 @@ import {
   StyleSheet,
   useColorScheme,
 } from "react-native";
-
+import { showMessage } from "react-native-flash-message";
+import { useSelector } from "react-redux";
 
 function ConfirmScreen() {
   const height = Dimensions.get("window").height;
@@ -22,6 +27,43 @@ function ConfirmScreen() {
   const route: any = useRoute();
   const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
   const [showCancelPolicy, setShowCancelPolicy] = useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.user);
+
+  const { createBooking } = useBooking();
+
+  const price = calculateTotalPrice(
+    route.params.params.params.item.priceForRegularDays,
+    route.params.params.params.item.priceForWeekends,
+    route.params.startDate,
+    route.params.endDate
+  );
+
+  const handleBooking = async () => {
+    createBooking(
+      route.params.params.params.item.id,
+      route.params.startDate,
+      route.params.endDate
+    )
+      .then((data) => {
+        navigation.navigate(
+          ...([
+            "cheque",
+            {
+              item: route.params.params.params.item,
+              booking: data.booking,
+            },
+          ] as never)
+        );
+      })
+      .catch((error) => {
+        if (error.response) {
+          showMessage({
+            message: error.response.data.message,
+            type: "danger",
+          });
+        }
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -33,9 +75,10 @@ function ConfirmScreen() {
         <View>
           <Text style={styles.title}>{route.params.params.params.title}</Text>
           <Text color="grayText" style={styles.dates}>
-            23 - 26 avgust uchun, 2023
+            {moment(route.params.startDate).format("DD")} -{" "}
+            {moment(route.params.endDate).format("DD")} avgust uchun
           </Text>
-          <Text style={styles.price}>14 mln so'm</Text>
+          <Text style={styles.price}>{price} UZS</Text>
         </View>
       </View>
       <View style={styles.pricingInformations}>
@@ -44,19 +87,23 @@ function ConfirmScreen() {
           <Text color="grayText" style={styles.priceViewTitle}>
             Umumiy narxi:
           </Text>
-          <Text style={styles.priceViewSum}>14.000.000 so'm</Text>
+          <Text style={styles.priceViewSum}>{price} UZS</Text>
         </View>
         <View style={styles.priceView}>
           <Text color="grayText" style={styles.priceViewTitle}>
             Band qilish uchun to'lov:
           </Text>
-          <Text style={styles.priceViewSum}>2.000.000 so'm</Text>
+          <Text style={styles.priceViewSum}>
+            {Math.ceil((price / 100) * 15)} UZS
+          </Text>
         </View>
         <View style={styles.priceView}>
           <Text color="grayText" style={styles.priceViewTitle}>
             Kirayotganda qilinadigan to'lov:
           </Text>
-          <Text style={styles.priceViewSum}>12.000.000 so'm</Text>
+          <Text style={styles.priceViewSum}>
+            {price - Math.ceil((price / 100) * 15)} UZS
+          </Text>
         </View>
       </View>
       <Pressable
@@ -69,26 +116,12 @@ function ConfirmScreen() {
             <CardIcon />
           </View>
           <Text style={styles.accordionText}>To'lov turlarini ko'rish</Text>
-          <View style={styles.accordionIcon}>
-           
-              <AntDesign
-                name="right"
-                size={20}
-                color={
-                  showPaymentMethods
-                    ? colorScheme === "light"
-                      ? "black"
-                      : "white"
-                    : "#A1A8B0"
-                }
-              />
-          </View>
         </View>
-        
-            <Text>
-              Tizimiziz ayni paytda Payme va Uzumbank to'lovlarini qo'llab
-              quvvatlaydi.
-            </Text>
+
+        <Text>
+          Tizimiziz ayni paytda Payme va Uzumbank to'lovlarini qo'llab
+          quvvatlaydi.
+        </Text>
       </Pressable>
       <Pressable
         onPress={() => setShowCancelPolicy(!showCancelPolicy)}
@@ -99,26 +132,12 @@ function ConfirmScreen() {
             <CancelIcon />
           </View>
           <Text style={styles.accordionText}>Bekor qilish siyosati</Text>
-          <View style={styles.accordionIcon}>
-            
-              <AntDesign
-                name="right"
-                size={20}
-                color={
-                  showCancelPolicy
-                    ? colorScheme === "light"
-                      ? "black"
-                      : "white"
-                    : "#A1A8B0"
-                }
-              />
-          </View>
         </View>
-        
-            <Text>
-              Bepul bekor qilish sanasidan keyin bekor qilsangiz "Band qilish
-              uchun to'lov" summasi qaytarilmaydi.
-            </Text>
+
+        <Text>
+          Bepul bekor qilish sanasidan keyin bekor qilsangiz "Band qilish uchun
+          to'lov" summasi qaytarilmaydi.
+        </Text>
       </Pressable>
       <View
         style={{
@@ -129,14 +148,12 @@ function ConfirmScreen() {
       />
       <View style={[{ height: height / 7 }, styles.bottomView]}>
         <View style={styles.prices}>
-          <Text style={styles.price2}>2 mln</Text>
+          <Text style={styles.price2}>{Math.ceil((price / 100) * 15)} UZS</Text>
           <Text>Oldindan to'lov</Text>
         </View>
         <Pressable
           onPress={() => {
-            navigation.navigate(
-              "cheque" as never
-            );
+            handleBooking();
           }}
           style={{
             backgroundColor: Colors[colorScheme ?? "light"].text,

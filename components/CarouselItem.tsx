@@ -1,9 +1,4 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  useColorScheme,
-} from "react-native";
+import { Image, Pressable, StyleSheet, useColorScheme } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
@@ -13,26 +8,26 @@ import { useState } from "react";
 import SkletonView from "@/components/SkletonView";
 
 type CarouselItemProps = {
-  itemIndex: number;
   width: number;
   images: Array<{ uri: string }>;
   title: string;
   price: string;
+  location: string;
+  item: any;
 };
 
 export function CarouselItem(props: CarouselItemProps) {
-  const { itemIndex, width, images, title, price } = props;
+  const { width, images, title, price, location, item } = props;
   const navigation = useNavigation();
 
   const [photoLoading, setPhotoLoading] = useState<boolean>(true);
-  const colorMode = useColorScheme();
 
   return (
-    <View key={itemIndex} style={styles.carouselView}>
+    <View style={styles.carouselView}>
       <Image
         source={{ uri: images[0].uri }}
         onLoadEnd={() => {
-            setPhotoLoading(false);
+          setPhotoLoading(false);
         }}
         style={[
           styles.carousel,
@@ -43,7 +38,7 @@ export function CarouselItem(props: CarouselItemProps) {
       />
       {photoLoading && (
         <SkletonView
-          height={width /2}
+          height={width / 2}
           width={"100%"}
           style={[
             styles.carousel,
@@ -64,6 +59,7 @@ export function CarouselItem(props: CarouselItemProps) {
                 params: {
                   images,
                   title,
+                  item,
                 },
               },
             ] as never)
@@ -82,9 +78,9 @@ export function CarouselItem(props: CarouselItemProps) {
             •
           </Text>
           <Text lightColor="#A1A8B0" darkColor="#A1A8B0">
-            Dacha
+            {location}
           </Text>
-          <AntDesign
+          {/* <AntDesign
             name="star"
             size={16}
             color="#FFBA55"
@@ -96,10 +92,13 @@ export function CarouselItem(props: CarouselItemProps) {
             style={styles.rateText}
           >
             4.0
-          </Text>
+          </Text> */}
         </View>
         <View style={styles.details}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>
+            {title.slice(0, 20)}
+            {title.length > 20 && "..."}
+          </Text>
           <FontAwesome
             name="bath"
             size={18}
@@ -111,7 +110,7 @@ export function CarouselItem(props: CarouselItemProps) {
             style={styles.showerText}
             darkColor="#A1A8B0"
           >
-            2
+            {item.baths}
           </Text>
           <Ionicons
             name="ios-bed-outline"
@@ -120,7 +119,7 @@ export function CarouselItem(props: CarouselItemProps) {
             style={styles.bedIcon}
           />
           <Text lightColor="#A1A8B0" darkColor="#A1A8B0" style={styles.bedText}>
-            4
+            {item.kingBeds}
           </Text>
         </View>
       </Pressable>

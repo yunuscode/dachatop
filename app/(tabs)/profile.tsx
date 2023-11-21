@@ -5,10 +5,12 @@ import { Text, View } from "@/components/Themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { setUserToken } from "@/actions/user";
+import { useNavigation } from "expo-router";
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const logOut = () => {
     dispatch(setUserToken("", ""));
@@ -58,6 +60,9 @@ export default function ProfileScreen() {
         </View>
       </Pressable>
       <Pressable
+        onPress={() => {
+          navigation?.navigate("modal" as never);
+        }}
         style={[
           styles.button,
           {

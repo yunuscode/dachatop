@@ -52,8 +52,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="saved"
         options={{
-          title: "Saqlanganlar",
-          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
+          title: "Band qilingan",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="calendar" color={color} />
+          ),
         }}
       />
       <Tabs.Screen

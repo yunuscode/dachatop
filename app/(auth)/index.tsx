@@ -23,6 +23,7 @@ function Login() {
       setLoading(true);
       login(phoneNumber)
         .then((data) => {
+          console.log(data);
           if (data?.otpCodeId?.length) {
             dispatch(setOTPCodeId(data?.otpCodeId));
             // @ts-ignore
@@ -31,7 +32,8 @@ function Login() {
             throw new Error("request error");
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           showMessage({
             message: t("BlockedOrServerDown"),
             type: "danger",

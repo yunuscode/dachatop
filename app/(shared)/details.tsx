@@ -1,10 +1,13 @@
 import Badge from "@/components/Badge";
 import { ScrollView, Text, View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
+import exclude from "@/utils/exclude";
+import abbreviateNumber from "@/utils/priceConverter";
 import { AntDesign } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dimensions,
   Image,
@@ -19,9 +22,37 @@ function DetailsScreen() {
   const height = Dimensions.get("window").height;
   const route = useRoute();
   const navigation = useNavigation();
-  const { images, title } = route.params as any;
+  const { images, title, item } = route.params as any;
   const [currentActiveIndex, setCurrentActiveIndex] = useState<number>(0);
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
+
+  const details = exclude(item, [
+    "id",
+    "name",
+    "entryTime",
+    "leaveTime",
+    "priceForRegularDays",
+    "priceForWeekends",
+    "description",
+    "locationId",
+    "location",
+    "userId",
+    "images",
+    "alcohol",
+  ]);
+
+  const getInfo = (item: string) => {
+    if (typeof details[item] === "boolean") {
+      return t("available");
+    }
+
+    if (typeof details[item] === "number") {
+      return details[item];
+    }
+
+    return t(details[item]);
+  };
 
   return (
     <>
@@ -73,20 +104,20 @@ function DetailsScreen() {
               color={Colors[colorScheme ?? "light"].grayText}
             />
             <Text color="grayText" style={styles.locationText}>
-              Yusufxona atrofida joylashgan
+              {item.location.name}
             </Text>
           </View>
           <View style={styles.featuresView}>
             <View style={styles.features}>
-              <DetailsBadge title="Xonalar soni" info="6 ta" />
-              <DetailsBadge title="Qishki basseyn" info="bor" />
-              <DetailsBadge
-                title="Kimlar uchun"
-                info="Oila, faqat erkaklar, faqat ayollar"
-              />
-              <DetailsBadge title="Playstation 4" info="bor" />
-              <DetailsBadge title="Karoake" info="bor" />
-              <DetailsBadge title="Alkogol" info="qo'yilmaydi" />
+              {Object.keys(details).map((item, index) => {
+                return (
+                  <DetailsBadge
+                    key={index}
+                    title={t(item)}
+                    info={getInfo(item)}
+                  />
+                );
+              })}
             </View>
           </View>
         </View>
@@ -99,15 +130,23 @@ function DetailsScreen() {
       ></View>
       <View style={[{ height: height / 7 }, styles.bottomView]}>
         <View style={styles.prices}>
-          <Text style={styles.price}>4 mln - 6 mln</Text>
-          <Text>Umumiy narxi</Text>
+          <Text style={styles.price}>
+            {abbreviateNumber(item.priceForRegularDays)} -{" "}
+            {abbreviateNumber(item.priceForWeekends)}
+          </Text>
+          <Text>{t("totalPrice")}</Text>
         </View>
         <Pressable
-            onPress={() => {
-                navigation.navigate(...["book", {
-                    params: route.params
-                }] as never)
-            }}
+          onPress={() => {
+            navigation.navigate(
+              ...([
+                "book",
+                {
+                  params: route.params,
+                },
+              ] as never)
+            );
+          }}
           style={{
             backgroundColor: Colors[colorScheme ?? "light"].text,
             width: "40%",
@@ -124,7 +163,7 @@ function DetailsScreen() {
               fontWeight: "600",
             }}
           >
-            Ijaraga olish
+            {t("getabook")}
           </Text>
         </Pressable>
       </View>
@@ -175,6 +214,7 @@ const styles = StyleSheet.create({
   },
   featuresView: {
     marginTop: 20,
+    paddingBottom: 20,
   },
   featuresTitle: {
     fontSize: 18,
@@ -211,16 +251,16 @@ function DetailsBadge({ title, info }: { title: string; info: string }) {
   return (
     <View
       style={{
-        paddingHorizontal: 12,
-        paddingVertical: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
         borderRadius: 32,
         borderWidth: 1,
         borderColor: "#E5E7EB",
         flexDirection: "row",
       }}
     >
-      <Text>{title}:</Text>
-      <Text style={{ fontWeight: "600" }}> {info}</Text>
+      <Text style={{ fontSize: 13 }}>{title}:</Text>
+      <Text style={{ fontSize: 13, fontWeight: "600" }}> {info}</Text>
     </View>
   );
 }

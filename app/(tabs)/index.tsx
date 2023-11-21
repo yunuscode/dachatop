@@ -7,20 +7,26 @@ import Badge from "@/components/Badge";
 import { useEffect, useState } from "react";
 import { fetchPlaces } from "@/api/mock";
 import { CarouselItem } from "@/components/CarouselItem";
-
+import useRoom from "@/api/useRoom";
+import { SERVER_URL } from "@/constants/config";
+import abbreviateNumber from "@/utils/priceConverter";
+import { FlashList } from "@shopify/flash-list";
 
 export default function TabOneScreen() {
   const colorScheme = useColorScheme();
   const [activeBadge, setActiveBadge] = useState(0);
   const [places, setPlaces] = useState<any[]>([]);
+  const { getRooms } = useRoom();
 
   const width = Dimensions.get("window").width;
 
   const fakeBadges = ["Eng mashxur", "Eng yangi", "Eng arzon"];
 
   useEffect(() => {
-    fetchPlaces.then((data: any) => {
-      setPlaces(data.data);
+    getRooms().then((data) => {
+      if (data.length) {
+        setPlaces(data.filter((i: any) => i.images.length));
+      }
     });
   }, []);
 
@@ -52,11 +58,28 @@ export default function TabOneScreen() {
         })}
       </ScrollView>
       <Text style={styles.title}>Eng ko'p ko'rilgan</Text>
-      {places.map((item, index) => {
-        return (
-          <CarouselItem images={item.images.map((i: any) => ({ uri: i }))} itemIndex={index} price="10 mln - 12 mln" width={width} title={item.title} key={index} />
-        );
-      })}
+      <View style={{ width: Dimensions.get("screen").width - 48 }}>
+        <FlashList
+          renderItem={({ item }: { item: any }) => {
+            return (
+              <CarouselItem
+                images={item.images.map((i: any) => ({
+                  uri: SERVER_URL + "files/" + i.path,
+                }))}
+                price={`${abbreviateNumber(
+                  item.priceForRegularDays
+                )} UZS - ${abbreviateNumber(item.priceForWeekends)} UZS`}
+                width={width}
+                title={item.name}
+                location={item?.location?.name}
+                item={item}
+              />
+            );
+          }}
+          data={places}
+          estimatedItemSize={places.length || 20}
+        />
+      </View>
     </ScrollView>
   );
 }

@@ -1,5 +1,10 @@
 import { Text, View } from "@/components/Themed";
-import { Dimensions, Pressable, StyleSheet, useColorScheme } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
 import { Path, Svg } from "react-native-svg";
 import CalendarPicker from "react-native-calendar-picker";
 import { useState } from "react";
@@ -7,32 +12,40 @@ import moment, { Moment } from "moment";
 import Colors from "@/constants/Colors";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
-
+import calculateTotalPrice from "@/utils/priceCalculator";
+import { showMessage } from "react-native-flash-message";
 
 function BookScreen() {
-
   const height = Dimensions.get("window").height;
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const route = useRoute();
-    
+  const {
+    params: { item },
+  } = route.params as any;
 
-    const [startDate, setStartDate] = useState<any>();
-    const [endDate, setEndDate] = useState<any>();
-moment.locale("uz")
-
+  const [startDate, setStartDate] = useState<any>();
+  const [endDate, setEndDate] = useState<any>();
+  moment.locale("uz");
 
   return (
     <View style={styles.container}>
-      <View style={[styles.infoTable, {
-        backgroundColor: colorScheme === "dark" ? "#0c57b3" : "#EBF4FF",
-      }]}>
+      <View
+        style={[
+          styles.infoTable,
+          {
+            backgroundColor: colorScheme === "dark" ? "#0c57b3" : "#EBF4FF",
+          },
+        ]}
+      >
         <View style={styles.infoTableInformations}>
           <Text color="grayText" style={styles.startDayText}>
             Kirish kuni
           </Text>
-          <Text style={styles.dateText}>{moment(startDate).format("Do MMM")}</Text>
-          <Text style={styles.dayText}>18:00 dan</Text>
+          <Text style={styles.dateText}>
+            {moment(startDate).format("Do MMM")}
+          </Text>
+          <Text style={styles.dayText}>{item.entryTime} dan</Text>
         </View>
         <Svg width="72" height="18" viewBox="0 0 72 18" fill="none">
           <Path
@@ -44,8 +57,10 @@ moment.locale("uz")
           <Text color="grayText" style={styles.startDayText}>
             Chiqish kuni
           </Text>
-          <Text style={styles.dateText}>{moment(endDate).format("Do MMM")}</Text>
-          <Text style={styles.dayText}>17:00gacha</Text>
+          <Text style={styles.dateText}>
+            {moment(endDate).format("Do MMM")}
+          </Text>
+          <Text style={styles.dayText}>{item.leaveTime} gacha</Text>
         </View>
       </View>
 
@@ -55,26 +70,42 @@ moment.locale("uz")
         selectedStartDate={startDate}
         selectedEndDate={endDate}
         allowRangeSelection
-        textStyle={[styles.calendarTextStyle, {
-          color: colorScheme === "dark" ? "#fff" : "#000"
-        }]}
+        textStyle={[
+          styles.calendarTextStyle,
+          {
+            color: colorScheme === "dark" ? "#fff" : "#000",
+          },
+        ]}
         minDate={startDate || new Date()}
         maxRangeDuration={7}
-        selectedRangeStartStyle={{backgroundColor: "#0064E5"}}
-        selectedRangeStyle={{ backgroundColor: "#0064E5"}}
+        selectedRangeStartStyle={{ backgroundColor: "#0064E5" }}
+        selectedRangeStyle={{ backgroundColor: "#0064E5" }}
         selectedDayStyle={{ backgroundColor: "#0064E5" }}
         selectedDayTextStyle={{ color: "#ffffff" }}
         restrictMonthNavigation
         onDateChange={(date, type) => {
-            if(type === "END_DATE") {
-                setEndDate(date);
-            } else {
-                setStartDate(date);
-            }
+          if (type === "END_DATE") {
+            setEndDate(date);
+          } else {
+            setStartDate(date);
+          }
         }}
         nextTitle="Keyingi"
         previousTitle="Oldingi"
-        months={["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"]}
+        months={[
+          "Yanvar",
+          "Fevral",
+          "Mart",
+          "Aprel",
+          "May",
+          "Iyun",
+          "Iyul",
+          "Avgust",
+          "Sentabr",
+          "Oktabr",
+          "Noyabr",
+          "Dekabr",
+        ]}
         weekdays={["Du", "Se", "Chor", "Pa", "Ju", "Sha", "Yak"]}
       />
       <View
@@ -86,15 +117,41 @@ moment.locale("uz")
       />
       <View style={[{ height: height / 7 }, styles.bottomView]}>
         <View style={styles.prices}>
-          <Text style={styles.price}>18 mln umumiy</Text>
-          <Text>Umumiy narxi</Text>
+          <Text style={styles.price}>
+            {startDate && endDate
+              ? `${calculateTotalPrice(
+                  item.priceForRegularDays,
+                  item.priceForWeekends,
+                  startDate,
+                  endDate
+                )} UZS`
+              : "Summani ko'rish"}
+          </Text>
+          <Text>
+            {startDate && endDate ? "Umumiy narxi" : "uchun sanalarni tanlang!"}
+          </Text>
         </View>
         <Pressable
-            onPress={() => {
-                navigation.navigate(...["confirm", {
-                    params: route.params
-                }] as never)
-            }}
+          onPress={() => {
+            if (!startDate || !endDate) {
+              showMessage({
+                message: "Sanalarni kiriting!",
+                type: "danger",
+              });
+              return;
+            }
+
+            navigation.navigate(
+              ...([
+                "confirm",
+                {
+                  params: route.params,
+                  startDate,
+                  endDate,
+                },
+              ] as never)
+            );
+          }}
           style={{
             backgroundColor: Colors[colorScheme ?? "light"].text,
             width: "40%",

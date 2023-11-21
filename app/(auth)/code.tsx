@@ -65,7 +65,7 @@ function Login() {
           maxLength={9}
           onChangeText={(text) => setCode(text)}
           value={code}
-          autoComplete="sms-otp" // android
+          autoComplete={Platform.OS == "ios" ? "one-time-code" : "sms-otp"} // android
           textContentType="oneTimeCode" // ios
         />
       </View>

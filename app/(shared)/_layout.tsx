@@ -79,7 +79,7 @@ export default function SharedLayout() {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="cheque"
         options={{
           title: "Tadaam!",
@@ -101,7 +101,7 @@ export default function SharedLayout() {
           },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="details"
         options={{
           title: "",
@@ -110,14 +110,17 @@ export default function SharedLayout() {
             const navigation = useNavigation();
 
             return (
-              <Pressable onPress={navigation.goBack} style={{
-                backgroundColor: Colors[colorScheme ?? 'light'].background,
-                justifyContent: "center",
-                alignItems: "center",
-                marginRight: 15,
-                padding: 10,
-                borderRadius: 50
-              }}>
+              <Pressable
+                onPress={navigation.goBack}
+                style={{
+                  backgroundColor: Colors[colorScheme ?? "light"].background,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: 15,
+                  padding: 10,
+                  borderRadius: 50,
+                }}
+              >
                 {({ pressed }) => (
                   <AntDesign
                     name="arrowleft"
@@ -129,32 +132,31 @@ export default function SharedLayout() {
               </Pressable>
             );
           },
-          headerRight: () => {
-            const navigation = useNavigation();
+          // headerRight: () => {
+          //   const navigation = useNavigation();
 
-            return (
-              <Pressable onPress={navigation.goBack} style={{
-                backgroundColor: Colors[colorScheme ?? 'light'].background,
-                justifyContent: "center",
-                alignItems: "center",
-                marginLeft: 15,
-                padding: 10,
-                borderRadius: 50
-              }}>
-                {({ pressed }) => (
-                  <AntDesign
-                    name="heart"
-                    size={25}
-                    color={"#FF5C5C"}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            );
-          }
+          //   return (
+          //     <Pressable onPress={navigation.goBack} style={{
+          //       backgroundColor: Colors[colorScheme ?? 'light'].background,
+          //       justifyContent: "center",
+          //       alignItems: "center",
+          //       marginLeft: 15,
+          //       padding: 10,
+          //       borderRadius: 50
+          //     }}>
+          //       {({ pressed }) => (
+          //         <AntDesign
+          //           name="heart"
+          //           size={25}
+          //           color={"#FF5C5C"}
+          //           style={{ opacity: pressed ? 0.5 : 1 }}
+          //         />
+          //       )}
+          //     </Pressable>
+          //   );
+          // }
         }}
       />
     </Stack>
-    
   );
 }
