@@ -11,16 +11,18 @@ import useRoom from "@/api/useRoom";
 import { SERVER_URL } from "@/constants/config";
 import abbreviateNumber from "@/utils/priceConverter";
 import { FlashList } from "@shopify/flash-list";
+import { useTranslation } from "react-i18next";
 
 export default function TabOneScreen() {
   const colorScheme = useColorScheme();
   const [activeBadge, setActiveBadge] = useState(0);
   const [places, setPlaces] = useState<any[]>([]);
   const { getRooms } = useRoom();
+  const { t } = useTranslation();
 
   const width = Dimensions.get("window").width;
 
-  const fakeBadges = ["Eng mashxur", "Eng yangi", "Eng arzon"];
+  const fakeBadges = [t("popular"), t("expensive"), t("cheapest")];
 
   useEffect(() => {
     getRooms().then((data) => {
@@ -39,7 +41,7 @@ export default function TabOneScreen() {
           size={24}
           color={Colors[colorScheme ?? "light"].text}
         />
-        <TextInput placeholder="Qidirish" style={styles.searchInput} />
+        <TextInput placeholder={t("search")} style={styles.searchInput} />
       </View>
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -57,7 +59,7 @@ export default function TabOneScreen() {
           );
         })}
       </ScrollView>
-      <Text style={styles.title}>Eng ko'p ko'rilgan</Text>
+      <Text style={styles.title}>{t("popular_text")}</Text>
       <View style={{ width: Dimensions.get("screen").width - 48 }}>
         <FlashList
           renderItem={({ item }: { item: any }) => {
@@ -77,7 +79,7 @@ export default function TabOneScreen() {
             );
           }}
           data={places}
-          estimatedItemSize={places.length || 20}
+          // estimatedItemSize={places.length || 20}
         />
       </View>
     </ScrollView>

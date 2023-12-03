@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "dachatop",
+    "name": "Arendacha",
     "slug": "dachatop",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -17,11 +17,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.muhammadyunusuz.dachatop"
+      "bundleIdentifier": "com.muhammadyunusuz.dachatop",
+      "buildNumber": "5"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.muhammadyunusuz.dachatop"
@@ -45,6 +46,9 @@
       },
       "eas": {
         "projectId": "cc639e5d-7287-4cd7-a1cd-120e5c2c6b71"
+      },
+      "bugsnag": {
+        "apiKey": "4905a39159a3c65e7581f89e8e3b141a"
       }
     },
     "runtimeVersion": {

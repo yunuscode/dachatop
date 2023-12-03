@@ -3,6 +3,7 @@ if (Platform.OS === "web") {
   //@ts-ignore
   global._frameTimestamp = null;
 }
+import Bugsnag from '@bugsnag/expo';
 import "react-native-reanimated";
 import "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -24,6 +25,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "@/state/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 import FlashMessage from "react-native-flash-message";
+Bugsnag.start();
+
 
 export {
   // Catch any errors thrown by the Layout component.

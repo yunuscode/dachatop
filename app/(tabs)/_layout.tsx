@@ -8,6 +8,7 @@ import { Text, View } from "@/components/Themed";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -24,6 +25,7 @@ export default function TabLayout() {
 
   const state = useSelector((state: RootState) => state.user);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!state.isLoggedIn) {
@@ -43,7 +45,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Bosh sahifa",
+          title: t("main"),
           headerTitle: "",
           header: Header,
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
@@ -52,7 +54,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="saved"
         options={{
-          title: "Band qilingan",
+          title: t("booked"),
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="calendar" color={color} />
           ),
@@ -61,7 +63,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profil",
+          title: t("profile"),
           tabBarIcon: ({ color }) => <TabBarIcon name="person" color={color} />,
         }}
       />
@@ -71,6 +73,8 @@ export default function TabLayout() {
 
 function Header() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
+
 
   return (
     <View
@@ -90,7 +94,7 @@ function Header() {
           fontWeight: "bold",
         }}
       >
-        O’zingiz uchun eng yaxshi joyni tanlang!
+        {t("main_text")}
       </Text>
       <FontAwesome5
         name="bell"

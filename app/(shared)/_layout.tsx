@@ -3,6 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
+import { useTranslation } from "react-i18next";
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -10,6 +11,7 @@ export const unstable_settings = {
 
 export default function SharedLayout() {
   const colorScheme = useColorScheme();
+  const { t} = useTranslation()
 
   return (
     <Stack>
@@ -38,7 +40,7 @@ export default function SharedLayout() {
       <Stack.Screen
         name="book"
         options={{
-          title: "Kunlarni tanlash",
+          title: t("select_dates"),
           headerLeft: () => {
             const navigation = useNavigation();
 
@@ -60,7 +62,7 @@ export default function SharedLayout() {
       <Stack.Screen
         name="confirm"
         options={{
-          title: "Tasdiqlash",
+          title: t("confirm"),
           headerLeft: () => {
             const navigation = useNavigation();
 

@@ -2,12 +2,20 @@ import { Text, View } from "@/components/Themed";
 import calculateTotalPrice from "@/utils/priceCalculator";
 import { useRoute } from "@react-navigation/native";
 import moment from "moment";
-import { Image, Pressable, StyleSheet } from "react-native";
+import { useTranslation } from "react-i18next";
+import { Image, Linking, Pressable, StyleSheet } from "react-native";
 
 export default function ChequeScreen() {
   const router = useRoute();
+  const { t } = useTranslation();
 
-  const { booking, item } = router.params as any;
+  const { booking, item, payment } = router.params as any;
+
+  const paymeClick = () => {
+    Linking.canOpenURL(payment.paymeUrl).then(() => {
+      Linking.openURL(payment.paymeUrl)
+    })
+  }
 
   const price = calculateTotalPrice(
     item.priceForRegularDays,
@@ -18,10 +26,10 @@ export default function ChequeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Muvaffaqiyatli band qilindi!</Text>
+      <Text style={styles.title}>{t("book_success")}</Text>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>Buyurtma raqami:</Text>
+          <Text style={styles.chequeTitle}>{t("order_number")}:</Text>
           <Text style={styles.chequeInfo}>
             #{booking.id.slice(booking.id.length - 5)}
           </Text>
@@ -29,7 +37,7 @@ export default function ChequeScreen() {
       </View>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>Kirish vaqti:</Text>
+          <Text style={styles.chequeTitle}>{t("enter_time")}:</Text>
           <Text style={styles.chequeInfo}>
             {moment(booking.startDate).format("LL")}, {item.entryTime}
           </Text>
@@ -37,7 +45,7 @@ export default function ChequeScreen() {
       </View>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>Chiqish vaqti:</Text>
+          <Text style={styles.chequeTitle}>{t("leave_time")}:</Text>
           <Text style={styles.chequeInfo}>
             {moment(booking.endDate).format("LL")}, {item.leaveTime}
           </Text>
@@ -45,7 +53,7 @@ export default function ChequeScreen() {
       </View>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>Oldindan to'lov:</Text>
+          <Text style={styles.chequeTitle}>{t("price_for_reservation")}:</Text>
           <Text style={styles.chequeInfo}>
             {Math.ceil((price / 100) * 15)} UZS
           </Text>
@@ -53,7 +61,7 @@ export default function ChequeScreen() {
       </View>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>Kirishdagi to'lov:</Text>
+          <Text style={styles.chequeTitle}>{t("price_entering")}:</Text>
           <Text style={styles.chequeInfo}>
             {price - Math.ceil((price / 100) * 15)} UZS
           </Text>
@@ -61,26 +69,29 @@ export default function ChequeScreen() {
       </View>
       <View style={styles.cheque}>
         <View style={styles.chequeRow}>
-          <Text style={styles.chequeTitle}>To'lov statusi:</Text>
-          <Text style={styles.chequeInfo}>Kutilyabdi</Text>
+          <Text style={styles.chequeTitle}>{t("payment_status")}:</Text>
+          <Text style={styles.chequeInfo}>{t(booking.status)}</Text>
         </View>
       </View>
       <View style={styles.warning}>
-        <Text style={styles.warningTitle}>Eslatma:</Text>
+        <Text style={styles.warningTitle}>{t("warning_title")}:</Text>
         <Text>
-          Siz muvaffaqiyatli band qildingiz va to'lov qismiga yetib keldingiz!
+          {t("warning_text")}
+          {/* Siz muvaffaqiyatli band qildingiz va to'lov qismiga yetib keldingiz!
           To'lovni 10 daqiqa ichida to'lamasangiz band qilishingiz bekor
           qilinadi. Pastdagi to'lov qilish tugmasini bosib keling va qaytib
-          kelganingizda sahifa avtomatik tarzda yangilandi.
+          kelganingizda sahifa avtomatik tarzda yangilandi. */}
         </Text>
       </View>
       <View style={styles.bottomView}>
-        <Pressable style={styles.paymeButton}>
-          <Text style={styles.paymeText}>Payme orqali to'lash</Text>
+        <Pressable onPress={() => {
+          paymeClick()
+        }} style={styles.paymeButton}>
+          <Text style={styles.paymeText}>{t("pay_with_payme")}</Text>
         </Pressable>
-        <Pressable style={styles.uzumButton}>
-          <Text style={styles.uzumText}>Uzumbank orqali to'lash</Text>
-        </Pressable>
+        {/* <Pressable style={styles.uzumButton}>
+          <Text style={styles.uzumText}>Uzumbank tez orada</Text>
+        </Pressable> */}
       </View>
     </View>
   );

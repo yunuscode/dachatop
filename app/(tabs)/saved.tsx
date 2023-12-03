@@ -11,9 +11,11 @@ import { useEffect, useState } from "react";
 import useBooking from "@/api/useBooking";
 import { SERVER_URL } from "@/constants/config";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const FlatItem = ({ item }: any) => {
   const theme = useColorScheme();
+  const {t} = useTranslation()
   const borderColor = theme == "dark" ? "#ffffff44" : "#00000044";
 
   return (
@@ -28,9 +30,9 @@ const FlatItem = ({ item }: any) => {
         />
         <View style={{ marginLeft: 10 }}>
           <Text style={styles.itemTitle}>{item.room.name}</Text>
-          <Text>Status: To'lanmagan</Text>
-          <Text>Kirish vaqti: {moment(item.startDate).format("L")}</Text>
-          <Text>Chiqish vaqti: {moment(item.endDate).format("L")}</Text>
+          <Text>{t("status")}: {t(item.status)}</Text>
+          <Text>{t("enter_time")}: {moment(item.startDate).format("L")}</Text>
+          <Text>{t("leave_time")}: {moment(item.endDate).format("L")}</Text>
         </View>
       </View>
       <View
@@ -49,12 +51,12 @@ const FlatItem = ({ item }: any) => {
           }}
         >
           <Text style={{ textAlign: "center", fontWeight: "500" }}>
-            Telefon qilish
+            {t("call")}
           </Text>
         </Pressable>
         <Pressable style={{ flexGrow: 1, padding: 5, paddingTop: 10 }}>
           <Text style={{ textAlign: "center", fontWeight: "500" }}>
-            Lokatsiyani ochish
+            {t("open_location")}
           </Text>
         </Pressable>
       </View>
@@ -83,7 +85,7 @@ export default function SavedScreen() {
 
   return (
     <View style={styles.container}>
-      {data?.length && (
+      {!!data?.length && (
         <FlatList
           onRefresh={() => {
             handleFetch();

@@ -6,11 +6,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { setUserToken } from "@/actions/user";
 import { useNavigation } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { t } = useTranslation()
 
   const logOut = () => {
     dispatch(setUserToken("", ""));
@@ -31,7 +33,7 @@ export default function ProfileScreen() {
           <Ionicons name="list" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
-          <Text style={styles.buttonTitle}>Ma'lumotlarni o'zgartirish</Text>
+          <Text style={styles.buttonTitle}>{t("change_informations")}</Text>
           <Ionicons
             name="chevron-forward"
             color={colorScheme === "dark" ? "#fff" : "#000"}
@@ -39,7 +41,7 @@ export default function ProfileScreen() {
           />
         </View>
       </Pressable>
-      <Pressable
+      {/* <Pressable
         style={[
           styles.button,
           {
@@ -58,7 +60,7 @@ export default function ProfileScreen() {
             size={22}
           />
         </View>
-      </Pressable>
+      </Pressable> */}
       <Pressable
         onPress={() => {
           navigation?.navigate("modal" as never);
@@ -74,7 +76,7 @@ export default function ProfileScreen() {
           <Ionicons name="language" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
-          <Text style={styles.buttonTitle}>Tilni sozlash</Text>
+          <Text style={styles.buttonTitle}>{t("select_language")}</Text>
           <Ionicons
             name="chevron-forward"
             color={colorScheme === "dark" ? "#fff" : "#000"}
@@ -94,7 +96,7 @@ export default function ProfileScreen() {
           <Ionicons name="call" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
-          <Text style={styles.buttonTitle}>Admin bilan bog'lanish</Text>
+          <Text style={styles.buttonTitle}>{t("contact")}</Text>
           <Ionicons
             name="chevron-forward"
             color={colorScheme === "dark" ? "#fff" : "#000"}
@@ -116,7 +118,7 @@ export default function ProfileScreen() {
           <Ionicons name="exit" color="#fff" size={20} />
         </View>
         <View style={styles.informations}>
-          <Text style={styles.buttonTitle}>Akkountdan chiqish</Text>
+          <Text style={styles.buttonTitle}>{t("logout")}</Text>
           <Ionicons
             name="chevron-forward"
             color={colorScheme === "dark" ? "#fff" : "#000"}

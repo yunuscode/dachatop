@@ -10,6 +10,7 @@ import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import moment from "moment";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dimensions,
   Image,
@@ -28,6 +29,8 @@ function ConfirmScreen() {
   const [showPaymentMethods, setShowPaymentMethods] = useState<boolean>(false);
   const [showCancelPolicy, setShowCancelPolicy] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
+  const { t } = useTranslation();
+
 
   const { createBooking } = useBooking();
 
@@ -51,6 +54,7 @@ function ConfirmScreen() {
             {
               item: route.params.params.params.item,
               booking: data.booking,
+              payment: data.payments
             },
           ] as never)
         );
@@ -76,22 +80,22 @@ function ConfirmScreen() {
           <Text style={styles.title}>{route.params.params.params.title}</Text>
           <Text color="grayText" style={styles.dates}>
             {moment(route.params.startDate).format("DD")} -{" "}
-            {moment(route.params.endDate).format("DD")} avgust uchun
+            {moment(route.params.endDate).format("DD")} {moment(route.params.endDate).format("MMMM")}
           </Text>
           <Text style={styles.price}>{price} UZS</Text>
         </View>
       </View>
       <View style={styles.pricingInformations}>
-        <Text style={styles.pricingInformationsTitle}>Narxlar tafsiloti</Text>
+        <Text style={styles.pricingInformationsTitle}>{t("price_overview")}</Text>
         <View style={styles.priceView}>
           <Text color="grayText" style={styles.priceViewTitle}>
-            Umumiy narxi:
+            {t("total_price")}:
           </Text>
           <Text style={styles.priceViewSum}>{price} UZS</Text>
         </View>
         <View style={styles.priceView}>
           <Text color="grayText" style={styles.priceViewTitle}>
-            Band qilish uchun to'lov:
+            {t("price_for_reservation")}:
           </Text>
           <Text style={styles.priceViewSum}>
             {Math.ceil((price / 100) * 15)} UZS
@@ -99,7 +103,7 @@ function ConfirmScreen() {
         </View>
         <View style={styles.priceView}>
           <Text color="grayText" style={styles.priceViewTitle}>
-            Kirayotganda qilinadigan to'lov:
+            {t("price_entering")}:
           </Text>
           <Text style={styles.priceViewSum}>
             {price - Math.ceil((price / 100) * 15)} UZS
@@ -110,18 +114,14 @@ function ConfirmScreen() {
         onPress={() => setShowPaymentMethods(!showPaymentMethods)}
         style={styles.pricingInformationsPayment}
       >
-        <Text style={styles.pricingInformationsTitle}>Ma'lumotlar</Text>
+        <Text style={styles.pricingInformationsTitle}>{t("informations")}</Text>
         <View style={styles.accordionWrapper}>
           <View style={styles.iconWrapper}>
             <CardIcon />
           </View>
-          <Text style={styles.accordionText}>To'lov turlarini ko'rish</Text>
+          <Text style={styles.accordionText}>{t("payment_options")}</Text>
         </View>
 
-        <Text>
-          Tizimiziz ayni paytda Payme va Uzumbank to'lovlarini qo'llab
-          quvvatlaydi.
-        </Text>
       </Pressable>
       <Pressable
         onPress={() => setShowCancelPolicy(!showCancelPolicy)}
@@ -131,13 +131,8 @@ function ConfirmScreen() {
           <View style={styles.cancelIconWrapper}>
             <CancelIcon />
           </View>
-          <Text style={styles.accordionText}>Bekor qilish siyosati</Text>
+          <Text style={styles.accordionText}>{t("cancellation_policy")}</Text>
         </View>
-
-        <Text>
-          Bepul bekor qilish sanasidan keyin bekor qilsangiz "Band qilish uchun
-          to'lov" summasi qaytarilmaydi.
-        </Text>
       </Pressable>
       <View
         style={{
@@ -149,7 +144,7 @@ function ConfirmScreen() {
       <View style={[{ height: height / 7 }, styles.bottomView]}>
         <View style={styles.prices}>
           <Text style={styles.price2}>{Math.ceil((price / 100) * 15)} UZS</Text>
-          <Text>Oldindan to'lov</Text>
+          <Text>{t("price_for_reservation")}</Text>
         </View>
         <Pressable
           onPress={() => {
@@ -171,7 +166,7 @@ function ConfirmScreen() {
               fontWeight: "600",
             }}
           >
-            To'lov qilish
+            {t("pay")}
           </Text>
         </Pressable>
       </View>
