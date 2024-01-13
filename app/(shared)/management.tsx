@@ -1,9 +1,9 @@
 import { Text, View } from "@/components/Themed";
 
-function NotificationsScreen() {
+function ManagementScreen() {
     return <View>
         <Text>Test</Text>
     </View>
 }
 
-export default NotificationsScreen;
+export default ManagementScreen;
