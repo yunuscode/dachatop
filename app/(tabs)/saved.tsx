@@ -11,56 +11,66 @@ import { useEffect, useState } from "react";
 import useBooking from "@/api/useBooking";
 import { SERVER_URL } from "@/constants/config";
 import moment from "moment";
+import "moment/locale/ru";
+import "moment/locale/uz-latn";
+import "moment/locale/en-gb";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const FlatItem = ({ item }: any) => {
   const theme = useColorScheme();
-  const {t} = useTranslation()
-  const borderColor = theme == "dark" ? "#ffffff44" : "#00000044";
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const borderColor = theme == "dark" ? "#ffffff33" : "#00000011";
+  const iconColor = theme == "dark" ? "#ffffff" : "#000000";
+  const user = useSelector((state: any) => state.user);
+  const lang = user.lang;
+
+  if (lang == "uz") {
+    moment.locale("uz-latn");
+  } else if (lang == "ru") {
+    moment.locale("ru");
+  } else {
+    moment.locale("en");
+  }
 
   return (
-    <View style={[styles.item, { borderColor: borderColor }]}>
-      <View style={styles.informations}>
-        <Image
-          source={{ uri: SERVER_URL + "files/" + item.room.images[0].path }}
-          style={{
-            width: "40%",
-            height: 80,
-          }}
-        />
-        <View style={{ marginLeft: 10 }}>
-          <Text style={styles.itemTitle}>{item.room.name}</Text>
-          <Text>{t("status")}: {t(item.status)}</Text>
-          <Text>{t("enter_time")}: {moment(item.startDate).format("L")}</Text>
-          <Text>{t("leave_time")}: {moment(item.endDate).format("L")}</Text>
-        </View>
-      </View>
-      <View
+    <Pressable
+      onPress={() => {
+        navigation.navigate(
+          ...([
+            "bookinfo",
+            {
+              item: item.room,
+              booking: item,
+              payment: item.payments,
+            },
+          ] as never)
+        );
+      }}
+      style={[styles.item, { borderColor: borderColor }]}
+    >
+      <Image
+        source={{ uri: SERVER_URL + "files/" + item.room.images[0].path }}
         style={{
-          flexDirection: "row",
-          borderTopWidth: 1,
-          borderTopColor: borderColor,
+          width: 50,
+          height: 50,
+          borderRadius: 5,
+          marginRight: 10,
         }}
-      >
-        <Pressable
-          style={{
-            flexGrow: 1,
-            padding: 10,
-            borderRightWidth: 1,
-            borderRightColor: borderColor,
-          }}
-        >
-          <Text style={{ textAlign: "center", fontWeight: "500" }}>
-            {t("call")}
-          </Text>
-        </Pressable>
-        <Pressable style={{ flexGrow: 1, padding: 5, paddingTop: 10 }}>
-          <Text style={{ textAlign: "center", fontWeight: "500" }}>
-            {t("open_location")}
-          </Text>
-        </Pressable>
+      />
+      <View style={{ marginRight: "auto" }}>
+        <Text style={styles.itemTitle}>{item.room.name}</Text>
+        <Text>{moment(item.createdAt).fromNow()}</Text>
       </View>
-    </View>
+      <MaterialCommunityIcons
+        name="chevron-right"
+        size={30}
+        color={iconColor}
+      />
+    </Pressable>
   );
 };
 
@@ -68,8 +78,12 @@ export default function SavedScreen() {
   const [data, setData] = useState<any[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const { getBookings } = useBooking();
+  const navigation = useNavigation();
   useEffect(() => {
     handleFetch();
+    navigation.addListener("focus", () => {
+      handleFetch();
+    });
   }, []);
 
   const handleFetch = () => {
@@ -139,8 +153,10 @@ const styles = StyleSheet.create({
     borderColor: "#00000044",
     marginBottom: 14,
     borderRadius: 5,
-    paddingTop: 5,
     overflow: "hidden",
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
   },
   informations: {
     flexDirection: "row",

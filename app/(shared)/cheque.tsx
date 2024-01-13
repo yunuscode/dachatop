@@ -89,9 +89,9 @@ export default function ChequeScreen() {
         }} style={styles.paymeButton}>
           <Text style={styles.paymeText}>{t("pay_with_payme")}</Text>
         </Pressable>
-        {/* <Pressable style={styles.uzumButton}>
-          <Text style={styles.uzumText}>Uzumbank tez orada</Text>
-        </Pressable> */}
+        <Pressable style={styles.uzumButton}>
+          <Text style={styles.uzumText}>Uzumbank orqali to'lash</Text>
+        </Pressable>
       </View>
     </View>
   );

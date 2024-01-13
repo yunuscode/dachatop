@@ -40,6 +40,9 @@ function DetailsScreen() {
     "userId",
     "images",
     "alcohol",
+    "bookings",
+    "user",
+    "phone_number"
   ]);
 
   const getInfo = (item: string) => {

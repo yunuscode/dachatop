@@ -84,7 +84,9 @@ const resources = {
       logout: "Logout",
       status: "Status",
       call: "Telefon qilish",
-      open_location: "Lokatsiya"
+      open_location: "Lokatsiya",
+      userIsDeleted: "This account is deleted, please contact support!",
+      booking_info: "Booking info",
     },
   },
   ru: {
@@ -164,9 +166,11 @@ const resources = {
       "select_language": "Изменить язык",
       "contact": "Контакты",
       "logout": "Выйти",
-      status: "Status",
-      call: "Telefon qilish",
-      open_location: "Lokatsiya"
+      status: "Статус",
+      call: "Позвонить",
+      open_location: "Локация",
+      "PAID": "Оплачено",
+      booking_info: "Информация о бронировании",
     },
   },
   uz: {
@@ -248,7 +252,9 @@ const resources = {
       "logout": "Chiqish",
       status: "Status",
       call: "Telefon qilish",
-      open_location: "Lokatsiya"
+      open_location: "Lokatsiya",
+      booking_info: "Band qilish haqida ma'lumot",
+      "PAID": "To'langan",
     }
     ,
   },

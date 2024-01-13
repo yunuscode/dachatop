@@ -15,6 +15,7 @@ import { useRoute } from "@react-navigation/native";
 import calculateTotalPrice from "@/utils/priceCalculator";
 import { showMessage } from "react-native-flash-message";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 function BookScreen() {
   const height = Dimensions.get("window").height;
@@ -26,8 +27,21 @@ function BookScreen() {
     params: { item },
   } = route.params as any;
 
+  const bookedDays = item.bookings || [];
+
+  console.log(bookedDays);
+
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
+
+  const dayIsBooked = (date: moment.Moment) => {
+    return bookedDays.some((day: any) => {
+      return (
+        date.isSameOrAfter(moment(day.startDate)) &&
+        date.isSameOrBefore(moment(day.endDate))
+      );
+    });
+  };
 
   // const isDisabledDate = (e: Date) => {
   //   console.log(e)
@@ -37,13 +51,13 @@ function BookScreen() {
 
   return (
     <View style={styles.container}>
-     
       <CalendarPicker
         startFromMonday
         scrollable
         selectedStartDate={startDate}
         selectedEndDate={endDate}
         allowRangeSelection
+        disabledDates={dayIsBooked}
         // disabledDates={isDisabledDate}
         textStyle={[
           styles.calendarTextStyle,
@@ -109,6 +123,19 @@ function BookScreen() {
         <Pressable
           onPress={() => {
             if (!startDate || !endDate) {
+              showMessage({
+                message: t("filldates"),
+                type: "danger",
+              });
+              return;
+            }
+
+            if(bookedDays.some((day: any) => {
+              return (
+                moment(startDate).isSameOrAfter(moment(day.startDate)) &&
+                moment(endDate).isSameOrBefore(moment(day.endDate))
+              );
+            })) {
               showMessage({
                 message: t("filldates"),
                 type: "danger",

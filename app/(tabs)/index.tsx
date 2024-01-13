@@ -12,6 +12,7 @@ import { SERVER_URL } from "@/constants/config";
 import abbreviateNumber from "@/utils/priceConverter";
 import { FlashList } from "@shopify/flash-list";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "expo-router";
 
 export default function TabOneScreen() {
   const colorScheme = useColorScheme();
@@ -19,6 +20,7 @@ export default function TabOneScreen() {
   const [places, setPlaces] = useState<any[]>([]);
   const { getRooms } = useRoom();
   const { t } = useTranslation();
+  const navigation = useNavigation()
 
   const width = Dimensions.get("window").width;
 
@@ -30,6 +32,15 @@ export default function TabOneScreen() {
         setPlaces(data.filter((i: any) => i.images.length));
       }
     });
+
+      navigation?.addListener("focus", () => {
+        getRooms().then((data) => {
+          if (data.length) {
+            setPlaces(data.filter((i: any) => i.images.length));
+          }
+        });
+      })
+
   }, []);
 
   return (

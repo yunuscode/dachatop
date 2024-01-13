@@ -1,9 +1,9 @@
-import { useColorScheme, Platform } from "react-native";
+import { useColorScheme, Platform, Pressable } from "react-native";
 if (Platform.OS === "web") {
   //@ts-ignore
   global._frameTimestamp = null;
 }
-import Bugsnag from '@bugsnag/expo';
+import Bugsnag from "@bugsnag/expo";
 import "react-native-reanimated";
 import "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -13,7 +13,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, useNavigation } from "expo-router";
 import { useEffect } from "react";
 
 import "@/i18n";
@@ -25,8 +25,9 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "@/state/store";
 import { QueryClient, QueryClientProvider } from "react-query";
 import FlashMessage from "react-native-flash-message";
+import { AntDesign } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 Bugsnag.start();
-
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -90,6 +91,56 @@ function RootLayoutNav() {
               <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: t("Select language") }}
+              />
+              <Stack.Screen
+                name="edit"
+                options={{
+                  title: t("change_informations"),
+                  headerLeft: () => {
+                    const navigation = useNavigation();
+
+                    return (
+                      <Pressable onPress={navigation.goBack}>
+                        {({ pressed }) => (
+                          <AntDesign
+                            name="arrowleft"
+                            size={25}
+                            color={Colors[colorScheme ?? "light"].text}
+                            style={{
+                              marginRight: 15,
+                              opacity: pressed ? 0.5 : 1,
+                            }}
+                          />
+                        )}
+                      </Pressable>
+                    );
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="bookinfo"
+                options={{
+                  title: t("booking_info"),
+                  headerLeft: () => {
+                    const navigation = useNavigation();
+
+                    return (
+                      <Pressable onPress={navigation.goBack}>
+                        {({ pressed }) => (
+                          <AntDesign
+                            name="arrowleft"
+                            size={25}
+                            color={Colors[colorScheme ?? "light"].text}
+                            style={{
+                              marginRight: 15,
+                              opacity: pressed ? 0.5 : 1,
+                            }}
+                          />
+                        )}
+                      </Pressable>
+                    );
+                  },
+                }}
               />
             </Stack>
             <FlashMessage position="top" />

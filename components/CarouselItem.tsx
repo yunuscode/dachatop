@@ -23,23 +23,29 @@ export function CarouselItem(props: CarouselItemProps) {
   const [photoLoading, setPhotoLoading] = useState<boolean>(true);
 
   return (
-    <View style={styles.carouselView}>
-      <Image
-        source={{ uri: images[0].uri }}
-        onLoadEnd={() => {
-          setPhotoLoading(false);
-        }}
-        style={[
-          styles.carousel,
-          {
-            height: width / 2,
-          },
-        ]}
-      />
-      {photoLoading && (
-        <SkletonView
-          height={width / 2}
-          width={"100%"}
+    <Pressable
+      onPress={() => {
+        navigation?.navigate(
+          ...([
+            "(shared)",
+            {
+              screen: "details",
+              params: {
+                images,
+                title,
+                item,
+              },
+            },
+          ] as never)
+        );
+      }}
+    >
+      <View style={styles.carouselView}>
+        <Image
+          source={{ uri: images[0].uri }}
+          onLoadEnd={() => {
+            setPhotoLoading(false);
+          }}
           style={[
             styles.carousel,
             {
@@ -47,25 +53,19 @@ export function CarouselItem(props: CarouselItemProps) {
             },
           ]}
         />
-      )}
-
-      <Pressable
-        onPress={() => {
-          navigation?.navigate(
-            ...([
-              "(shared)",
+        {photoLoading && (
+          <SkletonView
+            height={width / 2}
+            width={"100%"}
+            style={[
+              styles.carousel,
               {
-                screen: "details",
-                params: {
-                  images,
-                  title,
-                  item,
-                },
+                height: width / 2,
               },
-            ] as never)
-          );
-        }}
-      >
+            ]}
+          />
+        )}
+
         <View style={styles.informationsBoard}>
           <Text
             lightColor="#0064E5"
@@ -122,8 +122,8 @@ export function CarouselItem(props: CarouselItemProps) {
             {item.kingBeds}
           </Text>
         </View>
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 }
 

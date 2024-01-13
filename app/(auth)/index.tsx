@@ -1,7 +1,7 @@
 import NavigationButton from "@/components/Button";
 import { Text, TextInput, View } from "@/components/Themed";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Platform, Alert } from "react-native";
+import { StyleSheet, Platform, Alert, Pressable, Linking } from "react-native";
 import { useRootNavigation } from "expo-router";
 import { useState } from "react";
 import useLogin from "@/api/useLogin";
@@ -23,7 +23,7 @@ function Login() {
       setLoading(true);
       login(phoneNumber)
         .then((data) => {
-          console.log(data);
+          console.log(navigation);
           if (data?.otpCodeId?.length) {
             dispatch(setOTPCodeId(data?.otpCodeId));
             // @ts-ignore
@@ -32,8 +32,15 @@ function Login() {
             throw new Error("request error");
           }
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          if (error.response) {
+            if (error?.response?.data?.message == "USER_DELETED") {
+              return showMessage({
+                message: t("userIsDeleted"),
+                type: "danger",
+              });
+            }
+          }
           showMessage({
             message: t("BlockedOrServerDown"),
             type: "danger",
@@ -71,6 +78,46 @@ function Login() {
           onChangeText={(text) => setPhoneNumber(text)}
           value={phoneNumber}
         />
+      </View>
+      <View
+        style={{
+          marginTop: "auto",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Text
+          color="grayText"
+          style={{
+            marginTop: "auto",
+            fontSize: 13,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          By clicking "Login" you agree to our{" "}
+        </Text>
+        <Pressable
+          onPress={() => {
+            Linking.canOpenURL(
+              "https://docs.google.com/document/d/1VKaPPrBcncBPHyqf0k4FylIJro0jhU9pGe-zLGOcii4/edit?usp=sharing"
+            ).then((supported) => {
+              if (supported) {
+                Linking.openURL(
+                  "https://docs.google.com/document/d/1VKaPPrBcncBPHyqf0k4FylIJro0jhU9pGe-zLGOcii4/edit?usp=sharing"
+                );
+              } else {
+                console.log("Don't know how to open URI: ");
+              }
+            });
+          }}
+          style={{ alignItems: "center", justifyContent: "center", padding: 0 }}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 13 }}>
+            Terms of Service
+          </Text>
+        </Pressable>
       </View>
 
       <NavigationButton
@@ -133,7 +180,7 @@ const styles = StyleSheet.create({
   navigationButton: {
     paddingVertical: 16,
     borderRadius: 32,
-    marginTop: "auto",
+    marginTop: 20,
     marginBottom: 50,
   },
 });

@@ -1,21 +1,43 @@
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { Linking, Pressable, StyleSheet, useColorScheme } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { setUserToken } from "@/actions/user";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import useUser from "@/api/useUser";
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const { getMe } = useUser();
+  const [name, setName] = useState("Yuklanyabdi...");
+  const [phone, setPhone] = useState("Yuklanyabdi...");
 
   const logOut = () => {
     dispatch(setUserToken("", ""));
+  };
+
+  useEffect(() => {
+    fetchUser();
+
+    return navigation?.addListener("focus", () => {
+      fetchUser();
+    });
+  }, []);
+
+  const fetchUser = () => {
+    getMe().then((data) => {
+      if (data) {
+        setName(data.user.name);
+        setPhone(data.user.phone);
+      }
+    });
   };
 
   return (
@@ -23,12 +45,17 @@ export default function ProfileScreen() {
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>YY</Text>
       </View>
-      <Text style={styles.name}>Yusupov Yunusjon</Text>
+      <Text style={styles.name}>{name}</Text>
       <Text color="grayText" style={styles.phone}>
-        +998901515064
+        +{phone}
       </Text>
 
-      <Pressable style={styles.firstButton}>
+      <Pressable
+        style={styles.firstButton}
+        onPress={() => {
+          router.push("edit" as never);
+        }}
+      >
         <View style={styles.iconView}>
           <Ionicons name="list" color="#fff" size={20} />
         </View>
@@ -85,6 +112,19 @@ export default function ProfileScreen() {
         </View>
       </Pressable>
       <Pressable
+        onPress={() => {
+          Linking.canOpenURL(
+            "https://adventurous-powerpoint-377587.framer.app/support"
+          ).then((supported) => {
+            if (supported) {
+              Linking.openURL(
+                "https://adventurous-powerpoint-377587.framer.app/support"
+              );
+            } else {
+              console.log("Don't know how to open URI: ");
+            }
+          });
+        }}
         style={[
           styles.lastButton,
           {

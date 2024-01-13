@@ -1,6 +1,6 @@
 import { Octicons } from "@expo/vector-icons";
 import { Tabs, useNavigation } from "expo-router";
-import { StatusBar, useColorScheme } from "react-native";
+import { Pressable, StatusBar, useColorScheme } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -74,7 +74,8 @@ export default function TabLayout() {
 function Header() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-
+  const navigation = useNavigation();
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <View
@@ -96,15 +97,24 @@ function Header() {
       >
         {t("main_text")}
       </Text>
-      <FontAwesome5
-        name="bell"
-        size={28}
-        color={Colors[colorScheme ?? "light"].text}
-        style={{
-          opacity: 1,
-          marginTop: 10,
-        }}
-      />
+      {user.role == "OWNER" ||
+        (user.role == "ADMIN" && (
+          <Pressable
+            onPress={() => {
+              navigation.navigate(...(["(shared)"] as never));
+            }}
+          >
+            <FontAwesome5
+              name="atom"
+              size={28}
+              color={Colors[colorScheme ?? "light"].text}
+              style={{
+                opacity: 1,
+                marginTop: 10,
+              }}
+            />
+          </Pressable>
+        ))}
     </View>
   );
 }

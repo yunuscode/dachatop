@@ -16,9 +16,9 @@ export default function SharedLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="notifications"
+        name="management"
         options={{
-          title: "",
+          title: "Management",
           headerLeft: () => {
             const navigation = useNavigation();
 
@@ -86,10 +86,15 @@ export default function SharedLayout() {
         options={{
           title: "Tadaam!",
           headerLeft: () => {
-            const navigation = useNavigation();
+            const navigation = useNavigation<any>();
 
             return (
-              <Pressable onPress={navigation.goBack}>
+              <Pressable onPress={() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "(tabs)" }],
+                })
+              }}>
                 {({ pressed }) => (
                   <AntDesign
                     name="arrowleft"
@@ -103,6 +108,7 @@ export default function SharedLayout() {
           },
         }}
       />
+      
       <Stack.Screen
         name="details"
         options={{
