@@ -6,9 +6,10 @@ import abbreviateNumber from "@/utils/priceConverter";
 import { AntDesign } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Pressable,
@@ -26,6 +27,13 @@ function DetailsScreen() {
   const [currentActiveIndex, setCurrentActiveIndex] = useState<number>(0);
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const [showEnabled, setShowEnabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowEnabled(true);
+    }, 300);
+  }, [])
 
   const details = exclude(item, [
     "id",
@@ -60,7 +68,8 @@ function DetailsScreen() {
   return (
     <>
       <ScrollView>
-        <Carousel
+        {
+          showEnabled ? <Carousel
           width={width}
           height={width}
           data={images}
@@ -83,7 +92,15 @@ function DetailsScreen() {
               ]}
             />
           )}
-        />
+        /> :
+        <View style={{
+          height: width,
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <ActivityIndicator color={Colors[colorScheme ?? "light"].text} size="large" />
+        </View>
+        }
         <View style={styles.counter}>
           {images.map((_: never, index: number) => {
             return (

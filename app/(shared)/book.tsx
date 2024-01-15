@@ -66,7 +66,7 @@ function BookScreen() {
           },
         ]}
         minDate={startDate || new Date()}
-        maxRangeDuration={7}
+        maxRangeDuration={20}
         selectedRangeStartStyle={{ backgroundColor: "#0064E5" }}
         selectedRangeStyle={{ backgroundColor: "#0064E5" }}
         selectedDayStyle={{ backgroundColor: "#0064E5" }}

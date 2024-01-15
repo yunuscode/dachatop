@@ -93,6 +93,10 @@ function RootLayoutNav() {
                 options={{ presentation: "modal", title: t("Select language") }}
               />
               <Stack.Screen
+                name="tabone"
+                options={{ presentation: "modal", title: t("Browse_as_Guest") }}
+              />
+              <Stack.Screen
                 name="edit"
                 options={{
                   title: t("change_informations"),

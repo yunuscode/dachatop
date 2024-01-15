@@ -6,6 +6,7 @@ import { useNavigation } from "expo-router";
 import { Text, View } from "@/components/Themed";
 import { useState } from "react";
 import SkletonView from "@/components/SkletonView";
+import { useSelector } from "react-redux";
 
 type CarouselItemProps = {
   width: number;
@@ -19,12 +20,18 @@ type CarouselItemProps = {
 export function CarouselItem(props: CarouselItemProps) {
   const { width, images, title, price, location, item } = props;
   const navigation = useNavigation();
+  const user = useSelector((state: any) => state.user);
 
   const [photoLoading, setPhotoLoading] = useState<boolean>(true);
 
   return (
     <Pressable
       onPress={() => {
+
+        if(!user.isLoggedIn) {
+          return navigation?.goBack()
+        }
+        
         navigation?.navigate(
           ...([
             "(shared)",

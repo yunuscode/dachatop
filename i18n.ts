@@ -87,6 +87,7 @@ const resources = {
       open_location: "Lokatsiya",
       userIsDeleted: "This account is deleted, please contact support!",
       booking_info: "Booking info",
+      Browse_as_Guest: "Browse as Guest",
     },
   },
   ru: {
@@ -171,6 +172,7 @@ const resources = {
       open_location: "Локация",
       "PAID": "Оплачено",
       booking_info: "Информация о бронировании",
+      Browse_as_Guest: "Просмотр как гость",
     },
   },
   uz: {
@@ -255,6 +257,7 @@ const resources = {
       open_location: "Lokatsiya",
       booking_info: "Band qilish haqida ma'lumot",
       "PAID": "To'langan",
+      Browse_as_Guest: "Mehmon sifatida ko'rish",
     }
     ,
   },

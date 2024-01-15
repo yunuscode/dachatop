@@ -2,7 +2,7 @@
   "expo": {
     "name": "Arendacha",
     "slug": "dachatop",
-    "version": "1.0.7",
+    "version": "1.0.10",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.muhammadyunusuz.dachatop",
-      "buildNumber": "7"
+      "buildNumber": "9"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +26,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.muhammadyunusuz.dachatop",
-      "versionCode": 5
+      "versionCode": 7
     },
     "web": {
       "bundler": "metro",

@@ -79,6 +79,17 @@ function Login() {
           value={phoneNumber}
         />
       </View>
+      <Pressable onPress={() => {
+        navigation?.navigate("tabone" as never)
+      }} style={{ marginTop: 10}}>
+        <Text style={{
+          fontSize: 16,
+          fontWeight: "600",
+          textAlign: "right",
+        }}>
+          {t("Browse_as_Guest")}
+        </Text>
+      </Pressable>
       <View
         style={{
           marginTop: "auto",
