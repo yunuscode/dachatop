@@ -7,7 +7,7 @@ const VERIFY_ENDPOINT = API_URL + "/auth/verify";
 export default function useLogin() {
   const login = async (phone_number: string) => {
     const response = await axios.post(LOGIN_ENDPOINT, {
-      phone: "998" + phone_number,
+      phone: "+998" + phone_number,
     });
 
     return response.data;
