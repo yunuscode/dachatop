@@ -53,7 +53,7 @@ const FlatItem = ({ item }: any) => {
       style={[styles.item, { borderColor: borderColor }]}
     >
       <Image
-        source={{ uri: SERVER_URL + "files/" + item.room.images[0].path }}
+        source={{ uri: SERVER_URL + "dacha-images/" + item.room.images[0].path }}
         style={{
           width: 50,
           height: 50,
