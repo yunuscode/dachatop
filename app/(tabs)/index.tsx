@@ -77,7 +77,7 @@ export default function TabOneScreen() {
             return (
               <CarouselItem
                 images={item.images.map((i: any) => ({
-                  uri: SERVER_URL + "files/" + i.path,
+                  uri: SERVER_URL + "dacha-images/" + i.path,
                 }))}
                 price={`${abbreviateNumber(
                   item.priceForRegularDays
