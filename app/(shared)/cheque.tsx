@@ -17,6 +17,12 @@ export default function ChequeScreen() {
     })
   }
 
+  const uzumClick = () => {
+    Linking.canOpenURL(payment.uzumLink).then(() => {
+      Linking.openURL(payment.uzumLink)
+    })
+  }
+
   const price = calculateTotalPrice(
     item.priceForRegularDays,
     item.priceForWeekends,
@@ -89,7 +95,9 @@ export default function ChequeScreen() {
         }} style={styles.paymeButton}>
           <Text style={styles.paymeText}>{t("pay_with_payme")}</Text>
         </Pressable>
-        <Pressable style={styles.uzumButton}>
+        <Pressable onPress={() => {
+          uzumClick()
+        }} style={styles.uzumButton}>
           <Text style={styles.uzumText}>Uzumbank orqali to'lash</Text>
         </Pressable>
       </View>
